@@ -60,10 +60,9 @@ class pdf_parser:
                 num = float(self.values[item])
                 self.transactions[self.vendors[item]] = np.round(num,2)
         return self.transactions, self.month_range
-# transactions["CANADA_WIDE_PARKING"] = transactions.pop("CANADA")
-# transactions["LULULEMON"] = transactions.pop("LULULEMONCOM*")
+
 if __name__ == "__main__":
     pdf_loc = "\\Users\\malav\\Downloads\\eStatement_2023-07-13.pdf"
     class_init = pdf_parser()
-    transactions = class_init.main(pdf_loc)
+    transactions, _ = class_init.main(pdf_loc)
     print(transactions,len(transactions.keys()))
