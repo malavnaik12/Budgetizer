@@ -22,10 +22,10 @@ class categorizer:
         parser = pdf_parser()
         self.transactions, self.statement_months = parser.main(pdf_loc=pdf_loc)
         self.vendor_list = list(self.transactions.keys())
-        self.categorize()
 
-    def categorize(self):
-        self.file_loc = f"./data/{self.statement_months[0]}_{self.statement_months[1]}/"
+    def categorize(self,pdf_loc):
+        self.parse_pdf(pdf_loc=pdf_loc)
+        self.file_loc = f"./data/monthly_data/{self.statement_months[0]}_{self.statement_months[1]}/"
         try:
             self.categorized_expense_vendors = self.load_data("vendors.json")
             if len(self.categorized_expense_vendors) != 0:
@@ -40,6 +40,8 @@ class categorizer:
                                 self.categorized_expense_values[key] += self.transactions[vendor]
                     self.save_data("values.json",self.categorized_expense_values)
         except:
+            # self.parse_pdf(pdf_loc=pdf_loc)
+            # self.file_loc = f"./data/{self.statement_months[0]}_{self.statement_months[1]}/"
             for vendor in self.vendor_list:
                 # vendor_check = input(f"Would you like to edit this vendor name: {vendor}?\nPlease answer Yes or No (case-sensitive): ")
                 # if vendor_check == 'Yes':
@@ -59,8 +61,9 @@ class categorizer:
 
             self.save_data("vendors.json",self.categorized_expense_vendors)
             self.save_data("values.json",self.categorized_expense_values)
-        for key in self.categorized_expense_vendors.keys():
-            print(key,self.categorized_expense_vendors[key],self.categorized_expense_values[key])
+        # for key in self.categorized_expense_vendors.keys():
+        #     print(key,self.categorized_expense_vendors[key],self.categorized_expense_values[key])
+        return self.categorized_expense_vendors,self.categorized_expense_values
         
 class initDict_expenses(dict):
     _keys = ['Rental','Health','Groceries','Take-out','Travel','Car','Electricity','Internet','Natural Gas','Other',
@@ -78,4 +81,4 @@ class initDict_income(dict):
 if __name__ == "__main__":
     pdf_loc = "\\Users\\malav\\Downloads\\eStatement_2023-07-13.pdf"
     class_init = categorizer()
-    transactions = class_init.parse_pdf(pdf_loc)
+    transactions = class_init.categorize(pdf_loc)

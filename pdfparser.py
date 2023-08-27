@@ -1,7 +1,8 @@
-import tika
-tika.initVM()
+import tika;tika.initVM()
 from tika import parser
 import numpy as np
+import os
+import json
 
 class pdf_parser:
     def __init__(self):
@@ -46,6 +47,15 @@ class pdf_parser:
                         self.values.append(cost_val)
                     except:
                         continue
+    def load_data(self, data_filename):
+        os.makedirs(f"{self.file_loc}", exist_ok=True)
+        with open(self.file_loc+data_filename, 'r') as file:
+            return json.load(file)
+    
+    def save_data(self, data_filename, data):
+        os.makedirs(f"{self.file_loc}", exist_ok=True)
+        with open(self.file_loc+data_filename, 'w') as file:
+            json.dump(data, file)
 
     def main(self,pdf_loc):
         self.inputs_func(pdf_loc)
@@ -55,10 +65,17 @@ class pdf_parser:
             curr_vendor = self.vendors[item]
             if curr_vendor in self.transactions.keys():
                 num = float(self.values[item])
-                self.transactions[self.vendors[item]] += np.round(num,2)
+                self.transactions[self.vendors[item]] += round(num,2)
             else:
                 num = float(self.values[item])
-                self.transactions[self.vendors[item]] = np.round(num,2)
+                self.transactions[self.vendors[item]] = round(num,2)
+
+        self.file_loc = f"./data/raw_data/{self.month_range[0]}_{self.month_range[1]}/"
+        try:
+            self.transactions = self.load_data("transactions.json")
+        except:
+            self.save_data("transactions.json",self.transactions)
+
         return self.transactions, self.month_range
 
 if __name__ == "__main__":
