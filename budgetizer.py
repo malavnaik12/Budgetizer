@@ -27,20 +27,20 @@ class budgetizer:
         except:
             global_cat_vendors = initDict_expenses()
             global_cat_values = initDict_expenses()
-        cater = categorizer()
-        vendors, values = cater.categorize(pdf_loc=pdf_loc)
-        for key in vendors.keys():
-            if vendors[key] != 0:
-                if type(global_cat_vendors[key]) is int:
-                    global_cat_vendors[key] = []
-                #     global_cat_vendors[key] = set()
-                # global_cat_vendors[key] = set(global_cat_vendors[key])
-                global_cat_vendors[key].append(vendors[key])
-        for key in values.keys():
-            if values[key] != 0:
-                global_cat_values[key] += values[key]
-        self.save_data("vendors.json",global_cat_vendors)
-        self.save_data("values.json",global_cat_values)
+            cater = categorizer()
+            vendors, values = cater.categorize(pdf_loc=pdf_loc)
+            for key in vendors.keys():
+                if vendors[key] != 0:
+                    if type(global_cat_vendors[key]) is int:
+                        global_cat_vendors[key] = []
+                    #     global_cat_vendors[key] = set()
+                    # global_cat_vendors[key] = set(global_cat_vendors[key])
+                    global_cat_vendors[key].append(vendors[key])
+            for key in values.keys():
+                if values[key] != 0:
+                    global_cat_values[key] += values[key]
+            self.save_data("vendors.json",global_cat_vendors)
+            self.save_data("values.json",global_cat_values)
         for key in global_cat_values.keys():
             print(key,global_cat_vendors[key],global_cat_values[key])
 
