@@ -4,3 +4,4 @@ data*
 
 # Files
 test_*.py
+*.txt
